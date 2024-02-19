@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import Form from './Form'
 import { useSelector } from 'react-redux'
 
@@ -8,10 +8,61 @@ const Home = () => {
   const stddata=useSelector(state => state.studentdata);
   const stdnewdata=useSelector(state => state.addstddata);
 
+const [sum,sumtotal]=useState({
+
+maxt_total:'0',
+maxp_total:'0',
+markst_total:'0',
+marksp_total:'0'
+
+
+});
+
+
+React.useEffect(() => {
+  // const getvalue = 0;
+  stdnewdata.forEach((item) => {
+   
+    // console.log(getvalue);
+
+  const update ={...sum};
+
+  let update_maxt_total=parseFloat(update.maxt_total);
+  let update_maxp_total=parseFloat(update.maxp_total);
+  let update_markst_total= parseFloat(update.markst_total);
+  let update_marksp_total=parseFloat(update.marksp_total);
+
+  // console.log(update);
+  // console.log(update2);
+  // console.log(item.maxmarkst);
 
  
+  const getvalue ={
+
+   
+    
+
+  maxt_total:(update_maxt_total+parseFloat(item.maxmarkst)),
+ 
+
+
+
+  maxp_total:update_maxp_total+parseFloat(item.maxmarksp) ,
+  markst_total:update_markst_total+parseFloat(item.markst),
+  marksp_total:update_marksp_total+parseFloat(item.marksp),
+
+}
+
+sumtotal(getvalue);
+console.log(getvalue)
+   
+  });
   
-  console.log(stdnewdata);
+}, [stdnewdata]);
+ 
+  
+ let percentage=((sum.markst_total+sum.marksp_total)/(sum.maxp_total+sum.maxt_total)*100);
+  console.log(percentage);
   return (
     <>
       <div className='container '>
@@ -60,7 +111,7 @@ const Home = () => {
 
               </div>
               <div className='col-12 text-center h4 mt-5 font-italic fst-italic mystyle'>
-                Examination session:........................
+                Examination session:<span className='text-danger'>{stddata?.examheld}</span>
               </div>
 
               <div className='row p-5 fst-italic mystyle'>
@@ -121,7 +172,7 @@ const Home = () => {
                   return(
                   <tr>
                     <th scope="row">{index+1}</th>
-                    <td>{newdata?.subject}</td>
+                    <td >{newdata?.subject}</td>
                     <td>{(newdata?.maxmarkst)?(newdata?.maxmarkst):""}</td>
                     <td>{(newdata?.maxmarksp)?(newdata?.maxmarksp):""}</td>
                     <td>{(newdata?.markst)?(newdata?.markst):""}</td>
@@ -131,56 +182,17 @@ const Home = () => {
                   );
                  })}
 
-                    
-                 
-                
-                  {/* <tr>
-                    <th scope="row">2</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                  </tr> */}
                   <tr>
                     <th scope="row"></th>
                     <td className='fw-bold'>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{sum.maxt_total}</td>
+                    <td>{sum.maxp_total}</td>
+                    <td>{sum.markst_total}</td>
+                    <td>{sum.marksp_total}</td>
 
                   </tr>
                   <tr>
-                    <th scope="row" colSpan="6" className='center'> Grand Total</th>
+                    <th scope="row" colSpan="6" className='center'> Grand Total({sum.markst_total+sum.marksp_total}/{sum.maxp_total+sum.maxt_total})</th>
 
                   </tr>
                   <tr>
@@ -189,18 +201,19 @@ const Home = () => {
                         <div className='row'>
 
                           <div className='col'>
+                          {/* <div className={`col${percentage >=85 ?'text-danger':''}`}> */}
                             Grading
                           </div>
-                          <div className='col'>
+                          <div className={`${percentage >=85 ?'col text-danger':'col'}`}>
                           A+(85%+)Excellent
                           </div>
-                          <div className='col'>
+                          <div className={`${percentage >=70 && percentage < 85?'col text-danger':'col'}`}>
                             A(71-84%)Very good
                           </div>
-                          <div className='col'>
+                          <div className={`${percentage >=60 && percentage < 70?'col text-danger':'col'}`}>
                             B(61-70%)Good
                           </div>
-                          <div className='col'>
+                          <div className={`${percentage >=50 && percentage < 60?'col text-danger':'col'}`}>
                             C(50-60%)Satisfactory
                           </div>
 
