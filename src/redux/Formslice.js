@@ -39,7 +39,7 @@ const initialState ={
             
 
            state.addstddata.push(action.payload);
-    //    state.addstddata=action.payload.filter((data)=>data);;
+    
         }
     }
  })

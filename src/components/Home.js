@@ -245,7 +245,7 @@ console.log(getvalue)
 
 
               <div className='container fw-bold'>
-                <div className='row text-center mt-5 fs-6'>
+                <div className='row text-center mt-5 fs-6 pr-view'>
                   <div className='col-5 '>
                     Issue Date:
                   </div>
